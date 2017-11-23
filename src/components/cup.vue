@@ -1,49 +1,82 @@
 <template>
   <div class="cup">
-    <el-popover ref="bg-popup" placement= "right" trigger= "click" width="400">
-
+    <el-popover ref="bg-popup" placement= "right" trigger= "click" width="400" v-model="bgListVisible">
+      <el-row :gutter="24">
+        <el-col :span="12" v-for="(item, index) in bgList" :key="index">
+          <el-button @click="changeBackground(index)">
+            <img :src="item.url" :alt="`背景图${index}`">
+          </el-button>
+        </el-col>
+      </el-row>
     </el-popover>
     <el-popover ref="layout-popup" placement= "right" trigger= "click" width="400">
-
+      <el-row :gutter="24">
+        <el-col :span="12" v-for="(item, index) in layoutList" :key="index">
+          <el-button @click="changeBackground(index)">
+            <img :src="item.url" :alt="`layout${index}`">
+          </el-button>
+        </el-col>
+      </el-row>
     </el-popover>
     <el-container>
-      <el-side>
+      <el-aside>
         <ul>
           <li>
-            <el-button plain>更换背景</el-button>
+            <el-button plain v-popover:bg-popup>更换背景</el-button>
           </li>
           <li>
-            <el-button plain>更换布局</el-button>
+            <el-button plain v-popover:layout-popup>更换布局</el-button>
           </li>
         </ul>
-      </el-side>
+      </el-aside>
       <el-main>
-        <img src="/static/img/bg1.png" alt="背景图">
+        <img :src="bgUrl" alt="背景图">
         <el-button plain>上一步</el-button>
         <el-button plain>下一步</el-button>
         <el-button plain>清空重做</el-button>
       </el-main>
-      <el-side>
+      <el-aside>
         <img src="/static/img/tervis2.png" alt="杯子">
-      </el-side>
+      </el-aside>
     </el-container>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'cup',
-  data () {
-    return {
-      bgUrl: '/static/img/bg1.png'
+  const bl = require('../model/bg-list.json')
+  const ll = require('../model/layout-list.json')
+  export default {
+    name: 'cup',
+    methods: {
+      changeBackground (index) {
+        this.bgUrl = this.bgList[index].url
+        this.bgListVisible = false
+      }
+    },
+    mounted () {
+      this.bgList = bl
+      this.bgUrl = this.bgList[0].url
+      this.layoutList = ll
+    },
+    data () {
+      return {
+        bgListVisible: false,
+        bgList: [],
+        bgUrl: '',
+        layoutListVisible: false,
+        layoutList: []
+      }
     }
   }
-}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   li {
     list-style-type: none;
+  }
+  img {
+    width: 100%;
+    height: auto;
   }
 </style>

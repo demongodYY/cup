@@ -1,0 +1,14 @@
+[
+    {   
+        "name": "layout1",
+        "url": "/static/img/layout1.png"
+    },
+    {   
+        "name": "layout2",
+        "url": "/static/img/layout2.png"
+    },
+    {   
+        "name": "layout3",
+        "url": "/static/img/layout3.png"
+    }
+]

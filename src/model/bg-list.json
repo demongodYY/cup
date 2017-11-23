@@ -1,0 +1,10 @@
+[
+    {   
+        "name": "background1",
+        "url": "/static/img/bg1.png"
+    },
+    {   
+        "name": "background2",
+        "url": "/static/img/bg2.png"
+    }
+]
