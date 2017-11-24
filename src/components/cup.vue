@@ -30,7 +30,7 @@
         </ul>
       </el-aside>
       <el-main>
-        <my-canvas :bg-url="bgUrl"></my-canvas>
+        <my-canvas></my-canvas>
         <!-- <img :src="bgUrl" alt="背景图">
         <el-button plain>上一步</el-button>
         <el-button plain>下一步</el-button>
@@ -61,8 +61,10 @@
     },
     beforeMount () {
       this.bgList = bl
-      this.bgUrl = this.bgList[0].url
       this.layoutList = ll
+    },
+    mounted () {
+      this.changeBackground(0)
     },
     data () {
       return {
