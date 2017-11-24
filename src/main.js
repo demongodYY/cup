@@ -11,5 +11,8 @@ Vue.use(ElementUI)
 new Vue({
   el: '#app',
   template: '<App/>',
-  components: { App }
+  components: { App },
+  data: {
+    bus: new Vue()
+  }
 })

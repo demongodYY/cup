@@ -30,10 +30,11 @@
         </ul>
       </el-aside>
       <el-main>
-        <img :src="bgUrl" alt="背景图">
+        <my-canvas :bg-url="bgUrl"></my-canvas>
+        <!-- <img :src="bgUrl" alt="背景图">
         <el-button plain>上一步</el-button>
         <el-button plain>下一步</el-button>
-        <el-button plain>清空重做</el-button>
+        <el-button plain>清空重做</el-button> -->
       </el-main>
       <el-aside>
         <img src="/static/img/tervis2.png" alt="杯子">
@@ -43,17 +44,22 @@
 </template>
 
 <script>
+  import myCanvas from './canvas'
   const bl = require('../model/bg-list.json')
   const ll = require('../model/layout-list.json')
   export default {
     name: 'cup',
+    components: {
+      myCanvas
+    },
     methods: {
       changeBackground (index) {
         this.bgUrl = this.bgList[index].url
         this.bgListVisible = false
+        this.$root.bus.$emit('bgChange', this.bgUrl)
       }
     },
-    mounted () {
+    beforeMount () {
       this.bgList = bl
       this.bgUrl = this.bgList[0].url
       this.layoutList = ll
