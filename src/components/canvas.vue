@@ -21,7 +21,6 @@ export default {
   name: 'cupCanvas',
   data () {
     return {
-      textarea: '',
       textShow: false,
       layer: ''
     }
@@ -63,10 +62,19 @@ export default {
         const img = new Konva.Image({
           name: 'img',
           image: imgObj,
-          width: 100,
-          height: 100
+          width: 200,
+          height: 200,
+          x: this.layer.getWidth() / 2 - 100,
+          y: 100,
+          draggable: true
         })
-        this.layer.add(img)
+        const group = new Konva.Group({
+          clipFunc: (ctx) => {
+            ctx.arc(this.layer.getWidth() / 2, 200, 100, 0, Math.PI * 2)
+          }
+        })
+        group.add(img)
+        this.layer.add(group)
         this.layer.draw()
       }
     },
@@ -85,11 +93,9 @@ export default {
       const circle = new Konva.Circle({
         x: this.layer.getWidth() / 2,
         y: 200,
-        scaleX: 2,
-        scaleY: 2,
-        radius: 50,
+        radius: 100,
         stroke: 'blue',
-        strokeWidth: 3
+        strokeWidth: 1
       })
       const text = new Konva.Text({
         x: (this.layer.getWidth() / 2) - 100,
@@ -98,7 +104,7 @@ export default {
         height: 100,
         stroke: 'blue',
         strokeWidth: 1,
-        text: 'Simple1f',
+        text: 'Hello World!',
         fontSize: 30,
         fontFamily: 'Calibri'
       })
