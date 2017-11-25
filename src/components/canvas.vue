@@ -8,9 +8,9 @@
     <div id="myCanvas">
     </div>
     <input type="file" id="fileup"/>
-    <el-button plain>上一步</el-button>
-    <el-button plain>下一步</el-button>
-    <el-button plain>清空重做</el-button>
+    <el-button plain disabled>上一步</el-button>
+    <el-button plain disabled>下一步</el-button>
+    <el-button plain disabled>清空重做</el-button>
   </div>
 </template>
 
@@ -26,13 +26,9 @@ export default {
     }
   },
   methods: {
-    saveImage (stage) {
-      const dataUrl = stage.toImage({
-        callback: (img) => {
-          document.body.appendChild(img)
-        }
-      })
-      console.log(dataUrl)
+    saveImage (layer) {
+      const dataUrl = layer.toDataURL()
+      this.$root.bus.$emit('canvasChange', dataUrl)
     },
     inputText (text) {
       const textarea = this.$refs.textarea
@@ -52,6 +48,7 @@ export default {
           text.text(textarea.value)
           this.layer.draw()
           this.textShow = false
+          this.saveImage(this.layer)
         }
       })
     },
@@ -76,6 +73,7 @@ export default {
         group.add(img)
         this.layer.add(group)
         this.layer.draw()
+        this.saveImage(this.layer)
       }
     },
     uploadImage () {
@@ -84,7 +82,6 @@ export default {
         const fr = new FileReader()
         fr.onload = (e) => {
           this.drawImage(e.target.result)
-          // console.log(e.target.result)
         }
         fr.readAsDataURL(fileUp.files[0])
       }
@@ -137,7 +134,7 @@ export default {
         bgLayer.add(img)
         img.moveToBottom()
         bgLayer.draw()
-        this.saveImage(stage)
+        this.saveImage(this.layer)
       }
     })
     this.addShapes()

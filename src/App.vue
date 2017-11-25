@@ -1,11 +1,12 @@
 <template>
   <div id="app">
-    <cup/>
+    <cup />
   </div>
 </template>
 
 <script>
 import cup from './components/cup'
+// import preview from './components/preview'
 
 export default {
   name: 'app',

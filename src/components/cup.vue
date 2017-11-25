@@ -25,19 +25,16 @@
             <el-button plain v-popover:bg-popup>更换背景</el-button>
           </li>
           <li>
-            <el-button plain v-popover:layout-popup>更换布局</el-button>
+            <el-button plain v-popover:layout-popup disabled="true">更换布局</el-button>
           </li>
         </ul>
       </el-aside>
       <el-main>
         <my-canvas></my-canvas>
-        <!-- <img :src="bgUrl" alt="背景图">
-        <el-button plain>上一步</el-button>
-        <el-button plain>下一步</el-button>
-        <el-button plain>清空重做</el-button> -->
       </el-main>
       <el-aside>
-        <img src="/static/img/tervis2.png" alt="杯子">
+        <preview />
+        <!-- <img src="/static/img/tervis2.png" alt="杯子"> -->
       </el-aside>
     </el-container>
   </div>
@@ -45,12 +42,14 @@
 
 <script>
   import myCanvas from './canvas'
+  import preview from './preview'
   const bl = require('../model/bg-list.json')
   const ll = require('../model/layout-list.json')
   export default {
     name: 'cup',
     components: {
-      myCanvas
+      myCanvas,
+      preview
     },
     methods: {
       changeBackground (index) {
