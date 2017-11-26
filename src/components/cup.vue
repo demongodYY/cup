@@ -9,10 +9,10 @@
         </el-col>
       </el-row>
     </el-popover>
-    <el-popover ref="layout-popup" placement= "right" trigger= "click" width="400">
+    <el-popover ref="layout-popup" placement= "right" trigger= "click" width="400"  v-model="layoutListVisible">
       <el-row :gutter="24">
         <el-col :span="12" v-for="(item, index) in layoutList" :key="index">
-          <el-button @click="changeBackground(index)">
+          <el-button @click="changeLayout(index)">
             <img :src="item.url" :alt="`layout${index}`">
           </el-button>
         </el-col>
@@ -25,7 +25,7 @@
             <el-button plain v-popover:bg-popup>更换背景</el-button>
           </li>
           <li>
-            <el-button plain v-popover:layout-popup disabled="true">更换布局</el-button>
+            <el-button plain v-popover:layout-popup>更换布局</el-button>
           </li>
         </ul>
       </el-aside>
@@ -56,6 +56,11 @@
         this.bgUrl = this.bgList[index].url
         this.bgListVisible = false
         this.$root.bus.$emit('bgChange', this.bgUrl)
+      },
+      changeLayout (index) {
+        this.layout = this.layoutList[index].layout
+        this.layoutListVisible = false
+        this.$root.bus.$emit('layoutChange', this.layout)
       }
     },
     beforeMount () {
@@ -71,7 +76,8 @@
         bgList: [],
         bgUrl: '',
         layoutListVisible: false,
-        layoutList: []
+        layoutList: [],
+        layout: {}
       }
     }
   }

@@ -1,13 +1,30 @@
 <template>
   <div id="container">
-      <textarea
-        ref="textarea"
-        autofocus
-        v-show="textShow">
+    <el-dialog title="图片选择" width="540" :visible.sync="dialogVisible">
+      <div class="thumbs">
+        <el-row>
+          <el-col :span="5" v-for="(item, index) in images" :key="index">
+              <div class="img-btn">
+                <el-button type="success" size="mini" round @click="drawImage(item);">选择图片</el-button>
+                <br/>
+                <el-button type="danger" size="mini" round @click="images.splice(index, 1)">删除图片</el-button>
+              </div>
+              <img :src="item" :alt="`保存的图片${index}`" class="savedImg">
+          </el-col>
+      </el-row>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <input type="file" id="fileup" @change="uploadImage"/>
+        <el-button @click="dialogVisible = false">取 消</el-button>
+      </div>
+    </el-dialog>
+    <textarea
+      ref="textarea"
+      autofocus
+      v-show="textShow">
     </textarea>
     <div id="myCanvas">
     </div>
-    <input type="file" id="fileup"/>
     <el-button plain disabled>上一步</el-button>
     <el-button plain disabled>下一步</el-button>
     <el-button plain disabled>清空重做</el-button>
@@ -22,12 +39,16 @@ export default {
   data () {
     return {
       textShow: false,
-      layer: ''
+      layer: '',
+      stage: '',
+      dialogVisible: false,
+      currentGroup: '',
+      images: []
     }
   },
   methods: {
-    saveImage (layer) {
-      const dataUrl = layer.toDataURL()
+    saveImage () {
+      const dataUrl = this.stage.toDataURL()
       this.$root.bus.$emit('canvasChange', dataUrl)
     },
     inputText (text) {
@@ -48,84 +69,112 @@ export default {
           text.text(textarea.value)
           this.layer.draw()
           this.textShow = false
-          this.saveImage(this.layer)
+          this.saveImage()
         }
       })
     },
     drawImage (dataUrl) {
+      let shape
+      let sWidth
+      let sHeight
+      let pX
+      let pY
+      if (this.currentGroup.hasChildren('Circle')) {
+        shape = this.currentGroup.findOne('Circle')
+        sWidth = shape.size().width
+        sHeight = shape.size().height
+        pX = shape.position().x - sWidth / 2
+        pY = shape.position().y - sHeight / 2
+      } else if (this.currentGroup.hasChildren('Rect')) {
+        shape = this.currentGroup.findOne('Rect')
+        sWidth = shape.size().width
+        sHeight = shape.size().height
+        pX = shape.position().x
+        pY = shape.position().y
+      }
       const imgObj = new Image()
       imgObj.src = dataUrl
       imgObj.onload = () => {
         const img = new Konva.Image({
           name: 'img',
           image: imgObj,
-          width: 200,
-          height: 200,
-          x: this.layer.getWidth() / 2 - 100,
-          y: 100,
+          width: sWidth,
+          height: sHeight,
+          x: pX,
+          y: pY,
           draggable: true
         })
-        const group = new Konva.Group({
-          clipFunc: (ctx) => {
-            ctx.arc(this.layer.getWidth() / 2, 200, 100, 0, Math.PI * 2)
-          }
-        })
-        group.add(img)
-        this.layer.add(group)
+        this.currentGroup.add(img)
         this.layer.draw()
-        this.saveImage(this.layer)
+        this.saveImage()
+        this.dialogVisible = false
       }
     },
     uploadImage () {
       const fileUp = document.getElementById('fileup')
-      fileUp.onchange = () => {
-        const fr = new FileReader()
-        fr.onload = (e) => {
-          this.drawImage(e.target.result)
-        }
-        fr.readAsDataURL(fileUp.files[0])
+      const fr = new FileReader()
+      fr.onload = (e) => {
+        this.images.push(e.target.result)
+      }
+      fr.readAsDataURL(fileUp.files[0])
+    },
+    addImgShapes (imgObj) {
+      if (imgObj.type === 'circle') {
+        const group = new Konva.Group({
+          clipFunc: (ctx) => {
+            ctx.arc(imgObj.x, imgObj.y, imgObj.r, 0, Math.PI * 2)
+          }
+        })
+        const circle = new Konva.Circle({
+          x: imgObj.x,
+          y: imgObj.y,
+          radius: imgObj.r,
+          stroke: 'black',
+          strokeWidth: 2
+        })
+        group.add(circle)
+        group.on('click', () => {
+          this.currentGroup = group
+          this.dialogVisible = true
+        })
+        this.layer.add(group)
+        this.layer.draw()
       }
     },
-    addShapes () {
-      const circle = new Konva.Circle({
-        x: this.layer.getWidth() / 2,
-        y: 200,
-        radius: 100,
-        stroke: 'blue',
-        strokeWidth: 1
-      })
+    addTextShapes (textObj) {
       const text = new Konva.Text({
-        x: (this.layer.getWidth() / 2) - 100,
-        y: 400,
-        width: 200,
-        height: 100,
+        x: textObj.x,
+        y: textObj.y,
+        width: textObj.width,
+        height: textObj.height,
         stroke: 'blue',
         strokeWidth: 1,
-        text: 'Hello World!',
+        text: '点我输入文字',
         fontSize: 30,
         fontFamily: 'Calibri'
       })
       text.on('click', () => {
         this.inputText(text)
       })
-      this.layer.add(circle)
       this.layer.add(text)
       this.layer.draw()
     }
   },
   mounted () {
-    const stage = new Konva.Stage({
+    this.stage = new Konva.Stage({
       container: 'myCanvas',
       width: 800,
       height: 600
     })
     const bgLayer = new Konva.Layer()
-    this.layer = bgLayer
-    stage.add(bgLayer)
-    this.$root.bus.$on('bgChange', (text) => {
+    this.layer = new Konva.Layer()
+    this.stage.add(bgLayer)
+    this.stage.add(this.layer)
+    bgLayer.moveToBottom()
+    this.$root.bus.$on('bgChange', (bgUrl) => {
       bgLayer.find('.background').destroy()
       const bgImgObj = new Image()
-      bgImgObj.src = text
+      bgImgObj.src = bgUrl
       bgImgObj.onload = () => {
         const img = new Konva.Image({
           name: 'background',
@@ -134,11 +183,19 @@ export default {
         bgLayer.add(img)
         img.moveToBottom()
         bgLayer.draw()
-        this.saveImage(this.layer)
+        this.saveImage()
       }
     })
-    this.addShapes()
-    this.uploadImage()
+    this.$root.bus.$on('layoutChange', (layout) => {
+      this.layer.removeChildren()
+      layout.img.map((item) => {
+        this.addImgShapes(item)
+      })
+      layout.text.map((item) => {
+        this.addTextShapes(item)
+      })
+      this.saveImage()
+    })
   }
 }
 </script>
@@ -148,5 +205,43 @@ export default {
   }
   #myCanvas {
     position: relative;
+  }
+  img.savedImg {
+    position: absolute;
+    max-width:100%;
+    max-height:100%;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+  }
+  div.img-btn {
+    opacity: 0;
+    position: absolute;
+    height: 50%;
+    z-index: 2;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+  }
+  .el-button{
+    margin:5px;
+  }
+  .el-col {
+    position: relative;
+    height: 166px;
+    margin: 0 1.5%;
+  }
+  .el-col:hover {
+    border: 8px solid #00B6C9
+  }
+  .el-col:hover .savedImg {
+    opacity: 0.5;
+  }
+  .el-col:hover .img-btn {
+    opacity: 1;
   }
 </style>

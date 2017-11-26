@@ -1,14 +1,55 @@
 [
     {   
         "name": "layout1",
-        "url": "/static/img/layout1.png"
+        "url": "/static/img/layout1.png",
+        "layout": {
+            "img": [
+                {
+                    "type": "circle",
+                    "x": 200,
+                    "y": 200,
+                    "r": 130
+                }
+            ],
+            "text": [
+                {
+                    "x": 450,
+                    "y": 200,
+                    "width": 200,
+                    "height": 100
+                }
+            ]
+
+        }
     },
     {   
         "name": "layout2",
-        "url": "/static/img/layout2.png"
-    },
-    {   
-        "name": "layout3",
-        "url": "/static/img/layout3.png"
+        "url": "/static/img/layout2.png",
+        "layout": {
+            "img": [
+                {
+                    "type": "circle",
+                    "x": 250,
+                    "y": 200,
+                    "r": 100
+                },
+                {
+                    "type": "circle",
+                    "x": 550,
+                    "y": 200,
+                    "r": 100
+                }
+
+            ],
+            "text": [
+                {
+                    "x": 300,
+                    "y": 400,
+                    "width": 200,
+                    "height": 100
+                }
+
+            ]
+        }
     }
 ]
