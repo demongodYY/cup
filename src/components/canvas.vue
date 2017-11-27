@@ -14,7 +14,10 @@
       </el-row>
       </div>
       <div slot="footer" class="dialog-footer">
-        <input type="file" id="fileup" @change="uploadImage"/>
+        <el-input  v-model="inputUrl" placeholder="手动输入图片URL" >
+           <el-button slot="append" icon="el-icon-upload2" @click="images.push(inputUrl)" size="small"></el-button>
+        </el-input>
+        <input type="file" id="fileup" accept=".jpg, .jpeg, .png, .gif" @change="uploadImage"/>
         <el-button @click="dialogVisible = false">取 消</el-button>
       </div>
     </el-dialog>
@@ -46,9 +49,9 @@
     </el-popover>
     <div id="myCanvas">
     </div>
-    <el-button plain disabled>上一步</el-button>
-    <el-button plain disabled>下一步</el-button>
-    <el-button plain disabled>清空重做</el-button>
+    <!-- <el-button plain disabled>上一步</el-button>
+    <el-button plain disabled>下一步</el-button> -->
+    <el-button plain @click="$root.bus.$emit('layoutChange', layout)">清空重做</el-button>
   </div>
 </template>
 
@@ -60,6 +63,8 @@ export default {
   data () {
     return {
       textShow: false,
+      inputUrl: '',
+      layout: '',
       layer: '',
       stage: '',
       dialogVisible: false,
@@ -132,16 +137,13 @@ export default {
       let pX
       let pY
       if (this.currentGroup.findOne('Circle')) {
-        console.log('circle!')
         shape = this.currentGroup.findOne('Circle')
         sWidth = shape.size().width
         sHeight = shape.size().height
         pX = shape.position().x - sWidth / 2
         pY = shape.position().y - sHeight / 2
       } else if (this.currentGroup.findOne('Rect')) {
-        console.log('rect!')
         shape = this.currentGroup.findOne('Rect')
-        console.log(shape)
         sWidth = shape.size().width
         sHeight = shape.size().height
         pX = shape.position().x
@@ -263,6 +265,7 @@ export default {
       }
     })
     this.$root.bus.$on('layoutChange', (layout) => {
+      this.layout = layout
       this.layer.removeChildren()
       layout.img.map((item) => {
         this.addImgShapes(item)
