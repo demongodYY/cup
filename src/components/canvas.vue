@@ -131,14 +131,17 @@ export default {
       let sHeight
       let pX
       let pY
-      if (this.currentGroup.hasChildren('Circle')) {
+      if (this.currentGroup.findOne('Circle')) {
+        console.log('circle!')
         shape = this.currentGroup.findOne('Circle')
         sWidth = shape.size().width
         sHeight = shape.size().height
         pX = shape.position().x - sWidth / 2
         pY = shape.position().y - sHeight / 2
-      } else if (this.currentGroup.hasChildren('Rect')) {
+      } else if (this.currentGroup.findOne('Rect')) {
+        console.log('rect!')
         shape = this.currentGroup.findOne('Rect')
+        console.log(shape)
         sWidth = shape.size().width
         sHeight = shape.size().height
         pX = shape.position().x
@@ -171,27 +174,48 @@ export default {
       fr.readAsDataURL(fileUp.files[0])
     },
     addImgShapes (imgObj) {
+      let shape
+      let group
       if (imgObj.type === 'circle') {
-        const group = new Konva.Group({
+        group = new Konva.Group({
           clipFunc: (ctx) => {
             ctx.arc(imgObj.x, imgObj.y, imgObj.r, 0, Math.PI * 2)
           }
         })
-        const circle = new Konva.Circle({
+        shape = new Konva.Circle({
           x: imgObj.x,
           y: imgObj.y,
           radius: imgObj.r,
           stroke: 'black',
           strokeWidth: 2
         })
-        group.add(circle)
-        group.on('click', () => {
-          this.currentGroup = group
-          this.dialogVisible = true
+      } else if (imgObj.type === 'rect') {
+        group = new Konva.Group({
+          clipFunc: (ctx) => {
+            const pX = imgObj.x + imgObj.width / 2
+            const pY = imgObj.y + imgObj.height / 2
+            ctx.translate(pX, pY)
+            ctx.rotate(imgObj.rotation * Math.PI / 180)
+            ctx.translate(-pX, -pY)
+            ctx.rect(imgObj.x, imgObj.y, imgObj.width, imgObj.height)
+          }
         })
-        this.layer.add(group)
-        this.layer.draw()
+        shape = new Konva.Rect({
+          x: imgObj.x,
+          y: imgObj.y,
+          width: imgObj.width,
+          height: imgObj.height,
+          stroke: 'black',
+          strokeWidth: 2
+        })
       }
+      group.add(shape)
+      group.on('click', () => {
+        this.currentGroup = group
+        this.dialogVisible = true
+      })
+      this.layer.add(group)
+      this.layer.draw()
     },
     addTextShapes (textObj) {
       const text = new Konva.Text({

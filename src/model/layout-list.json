@@ -19,7 +19,6 @@
                     "height": 100
                 }
             ]
-
         }
     },
     {   
@@ -49,6 +48,255 @@
                     "height": 100
                 }
 
+            ]
+        }
+    },
+    {   
+        "name": "layout3",
+        "url": "/static/img/layout3.png",
+        "layout": {
+            "img": [
+                {
+                    "type": "circle",
+                    "x": 250,
+                    "y": 240,
+                    "r": 80
+                },
+                {
+                    "type": "circle",
+                    "x": 390,
+                    "y": 180,
+                    "r": 80
+                },
+                {
+                    "type": "circle",
+                    "x": 530,
+                    "y": 240,
+                    "r": 80
+                }
+
+            ],
+            "text": [
+                {
+                    "x": 300,
+                    "y": 400,
+                    "width": 200,
+                    "height": 100
+                }
+            ]
+        }
+    },
+    {   
+        "name": "layout4",
+        "url": "/static/img/layout4.png",
+        "layout": {
+            "img": [
+                {
+                    "type": "rect",
+                    "x": 150,
+                    "y": 100,
+                    "width": 200,
+                    "height": 200,
+                    "rotation": -20
+                },
+                {
+                    "type": "rect",
+                    "x": 450,
+                    "y": 100,
+                    "width": 200,
+                    "height": 200,
+                    "rotation": 20
+                }
+            ],
+            "text": [
+                {
+                    "x": 300,
+                    "y": 400,
+                    "width": 200,
+                    "height": 100
+                }
+            ]
+        }
+    },
+    {   
+        "name": "layout5",
+        "url": "/static/img/layout5.png",
+        "layout": {
+            "img": [
+                {
+                    "type": "circle",
+                    "x": 390,
+                    "y": 180,
+                    "r": 120
+                }
+            ],
+            "text": [
+                {
+                    "x": 300,
+                    "y": 400,
+                    "width": 200,
+                    "height": 100
+                }
+            ]
+        }
+    },
+    {   
+        "name": "layout6",
+        "url": "/static/img/layout6.png",
+        "layout": {
+            "img": [
+                {
+                    "type": "circle",
+                    "x": 250,
+                    "y": 200,
+                    "r": 100
+                },
+                {
+                    "type": "circle",
+                    "x": 550,
+                    "y": 200,
+                    "r": 100
+                }
+            ],
+            "text": [
+                {
+                    "x": 150,
+                    "y": 400,
+                    "width": 200,
+                    "height": 100
+                },
+                {
+                    "x": 450,
+                    "y": 400,
+                    "width": 200,
+                    "height": 100
+                }
+            ]
+        }
+    },
+    {   
+        "name": "layout7",
+        "url": "/static/img/layout7.png",
+        "layout": {
+            "img": [
+                {
+                    "type": "rect",
+                    "x": 300,
+                    "y": 100,
+                    "width": 200,
+                    "height": 200,
+                    "rotation": 0
+                }
+            ],
+            "text": [
+                {
+                    "x": 300,
+                    "y": 400,
+                    "width": 200,
+                    "height": 100
+                }
+            ]
+        }
+    },
+    {   
+        "name": "layout8",
+        "url": "/static/img/layout8.png",
+        "layout": {
+            "img": [
+                {
+                    "type": "rect",
+                    "x": 150,
+                    "y": 100,
+                    "width": 200,
+                    "height": 200,
+                    "rotation": 0
+                },
+                {
+                    "type": "rect",
+                    "x": 450,
+                    "y": 100,
+                    "width": 200,
+                    "height": 200,
+                    "rotation": 0
+                }
+            ],
+            "text": [
+                {
+                    "x": 150,
+                    "y": 400,
+                    "width": 200,
+                    "height": 100
+                },
+                {
+                    "x": 450,
+                    "y": 400,
+                    "width": 200,
+                    "height": 100
+                }
+            ]
+        }
+    },
+    {   
+        "name": "layout9",
+        "url": "/static/img/layout9.png",
+        "layout": {
+            "img": [
+                {
+                    "type": "rect",
+                    "x": 100,
+                    "y": 150,
+                    "width": 200,
+                    "height": 200,
+                    "rotation": -15
+                },
+                {
+                    "type": "rect",
+                    "x": 300,
+                    "y": 100,
+                    "width": 200,
+                    "height": 200,
+                    "rotation": 0
+                },
+                {
+                    "type": "rect",
+                    "x": 500,
+                    "y": 150,
+                    "width": 200,
+                    "height": 200,
+                    "rotation": 15
+                }
+            ],
+            "text": [
+                {
+                    "x": 300,
+                    "y": 400,
+                    "width": 200,
+                    "height": 100
+                }
+            ]
+        }
+    },
+    {   
+        "name": "layout10",
+        "url": "/static/img/layout10.png",
+        "layout": {
+            "img": [
+                {
+                    "type": "rect",
+                    "x": 130,
+                    "y": 130,
+                    "width": 230,
+                    "height": 230,
+                    "rotation": 0
+                }
+            ],
+            "text": [
+                {
+                    "x": 450,
+                    "y": 200,
+                    "width": 200,
+                    "height": 100
+                }
             ]
         }
     }
