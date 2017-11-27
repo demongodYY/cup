@@ -34,7 +34,6 @@
       </el-main>
       <el-aside>
         <preview />
-        <!-- <img src="/static/img/tervis2.png" alt="杯子"> -->
       </el-aside>
     </el-container>
   </div>
@@ -69,6 +68,7 @@
     },
     mounted () {
       this.changeBackground(0)
+      this.changeLayout(0)
     },
     data () {
       return {
