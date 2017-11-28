@@ -256,6 +256,8 @@ export default {
       bgImgObj.onload = () => {
         const img = new Konva.Image({
           name: 'background',
+          width: 800,
+          height: 600,
           image: bgImgObj
         })
         bgLayer.add(img)

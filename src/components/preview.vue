@@ -4,8 +4,9 @@
     </div>
     <div id="images-back">
       <img src="/static/img/cup-back.png" />
+       <el-slider v-model="degree" :max="180" :min="-180"></el-slider>
     </div>
-        <div id="images-front">
+    <div id="images-front">
       <img src="/static/img/cup-front.png" />
     </div>
   </div>
@@ -19,14 +20,15 @@
       return {
         scene: null,
         camera: null,
-        renderer: null
+        renderer: null,
+        cylinderMesh: null,
+        degree: 0
       }
     },
     methods: {
       initScene () {
         const container = document.getElementById('p-container')
         this.scene = new THREE.Scene()
-        // this.scene.background = new THREE.Color()
         this.camera = new THREE.PerspectiveCamera(45, 225 / 475, 1, 2000)
         this.camera.position.y = 400
         this.scene.add(this.camera)
@@ -38,36 +40,34 @@
         this.scene.add(ambientLight)
       },
       renderCup () {
-        const cylinderGeo = new THREE.CylinderGeometry(155, 128, 585, 40, 5, true)
+        const cylinderGeo = new THREE.CylinderGeometry(155, 128, 585, 64, 5, true)
         const texture = new THREE.TextureLoader().load('/static/img/bg1.png', (tex) => {
-          texture.wrapS = texture.wrapT = THREE.RepeatWrapping
-          texture.anisotropy = 16
+          texture.anisotropy = 2
           const cylinderMat = new THREE.MeshPhongMaterial({
             map: texture,
             side: THREE.DoubleSide,
             opacity: 0.8,
             transparent: true
           })
-          const cylinderMesh = new THREE.Mesh(cylinderGeo, cylinderMat)
-          cylinderMesh.position.set(0, -40, 0)
-          this.scene.add(cylinderMesh)
+          this.cylinderMesh = new THREE.Mesh(cylinderGeo, cylinderMat)
+          this.cylinderMesh.position.set(0, -40, 0)
+          this.scene.add(this.cylinderMesh)
           this.camera.position.z = 800
           this.camera.lookAt(this.scene.position)
           const animate = () => {
             requestAnimationFrame(animate)
-            cylinderMesh.rotation.y += 0.01
+            this.cylinderMesh.rotation.y = this.degree * Math.PI / 180
             this.renderer.render(this.scene, this.camera)
           }
           animate()
-          // this.renderer.render(this.scene, this.camera)
           this.$root.bus.$on('canvasChange', (url) => {
-            this.updateTexture(cylinderMesh, url)
+            this.updateTexture(url)
           })
         })
       },
-      updateTexture (mesh, url) {
-        mesh.material.map = new THREE.TextureLoader().load(url)
-        mesh.material.needsUpdate = true
+      updateTexture (url) {
+        this.cylinderMesh.material.map = new THREE.TextureLoader().load(url)
+        this.cylinderMesh.material.needsUpdate = true
       }
     },
     mounted () {
