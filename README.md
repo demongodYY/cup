@@ -1,6 +1,6 @@
 # 3dcup
 
-> A Vue.js project
+> A Vue.js + 3D.js project  用于模拟杯子的3D模型，并可以替换杯子上的贴图和文字。效果请预览https://github.com/demongodYY/preview-cup
 
 ## Build Setup
 
